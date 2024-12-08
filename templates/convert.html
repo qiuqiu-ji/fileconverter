@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="converter-container">
+    <div class="upload-section">
+        <div class="upload-box" id="uploadBox">
+            <div class="upload-content">
+                <img src="/static/images/upload-icon.svg" alt="上传" class="upload-icon">
+                <h2>拖拽文件到这里</h2>
+                <p>或者</p>
+                <label for="fileInput" class="upload-button">选择文件</label>
+                <input type="file" id="fileInput" style="display: none;">
+            </div>
+        </div>
+        <div class="format-selector" style="display: none;" id="formatSelector">
+            <h3>选择目标格式</h3>
+            <div class="format-options">
+                <!-- 格式选项将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <div class="conversion-progress" style="display: none;" id="conversionProgress">
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress" id="progressBar"></div>
+            </div>
+            <p class="status-text" id="statusText">正在转换...</p>
+        </div>
+        <button class="cancel-button" id="cancelButton">取消</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/converter.js"></script>
+{% endblock %} 

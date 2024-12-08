@@ -1,0 +1,102 @@
+# 繁體中文翻譯文件
+msgid ""
+msgstr ""
+"Project-Id-Version: file_converter 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-20 12:00+0800\n"
+"PO-Revision-Date: 2024-01-20 12:00+0800\n"
+"Last-Translator: Your Name <your.email@example.com>\n"
+"Language-Team: Traditional Chinese\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 通用文本
+msgid "File Converter"
+msgstr "檔案轉換器"
+
+msgid "Convert"
+msgstr "轉換"
+
+msgid "Upload"
+msgstr "上傳"
+
+msgid "Download"
+msgstr "下載"
+
+# 文件状态
+msgid "Processing"
+msgstr "處理中"
+
+msgid "Completed"
+msgstr "已完成"
+
+msgid "Failed"
+msgstr "失敗"
+
+# 错误消息
+msgid "File size exceeds limit"
+msgstr "檔案大小超出限制"
+
+msgid "Unsupported file format"
+msgstr "不支援的檔案格式"
+
+msgid "Conversion failed"
+msgstr "轉換失敗"
+
+msgid "Please login first"
+msgstr "請先登入"
+
+# 导航菜单
+msgid "Home"
+msgstr "首頁"
+
+msgid "Start Converting"
+msgstr "開始轉換"
+
+msgid "Login"
+msgstr "登入"
+
+msgid "Register"
+msgstr "註冊"
+
+msgid "Profile"
+msgstr "個人中心"
+
+msgid "Logout"
+msgstr "登出"
+
+# 功能描述
+msgid "Batch conversion"
+msgstr "批次轉換"
+
+msgid "Format optimization"
+msgstr "格式最佳化"
+
+msgid "Secure storage"
+msgstr "安全儲存"
+
+# 用户提示
+msgid "Supported Formats"
+msgstr "支援的格式"
+
+msgid "Image Formats"
+msgstr "圖片格式"
+
+msgid "Document Formats"
+msgstr "文件格式"
+
+msgid "How it works"
+msgstr "使用步驟"
+
+msgid "Step 1: Upload your file"
+msgstr "步驟1：上傳檔案"
+
+msgid "Step 2: Select format"
+msgstr "步驟2：選擇格式"
+
+msgid "Step 3: Download converted file"
+msgstr "步驟3：下��轉換後的檔案"
+
+# ... 其他翻译内容 ... 

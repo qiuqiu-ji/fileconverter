@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Profile" %} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- 个人信息卡片 -->
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                {% if user.profile.avatar %}
+                    <img src="{{ user.profile.avatar.url }}" alt="Avatar" 
+                         class="rounded-circle img-fluid mb-3" style="width: 150px;">
+                {% else %}
+                    <img src="{% static 'images/default-avatar.png' %}" alt="Default Avatar"
+                         class="rounded-circle img-fluid mb-3" style="width: 150px;">
+                {% endif %}
+                <h5 class="mb-1">{{ user.username }}</h5>
+                <p class="text-muted mb-3">{{ user.email }}</p>
+                {% if not user.is_verified %}
+                    <div class="alert alert-warning">
+                        {% trans "Email not verified" %}
+                        <a href="{% url 'accounts:resend_verification' %}">
+                            {% trans "Resend verification email" %}
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- 配额信息 -->
+        <div class="card mb-4">
+            <div class="card-header">
+                {% trans "Usage Statistics" %}
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">{% trans "Daily Conversions" %}</label>
+                    <div class="progress">
+                        {% with percentage=user.get_daily_usage_percentage %}
+                            <div class="progress-bar" role="progressbar" 
+                                 style="width: {{ percentage }}%"
+                                 aria-valuenow="{{ percentage }}" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="100">
+                                {{ user.daily_conversions }}/{{ user.daily_conversion_limit }}
+                            </div>
+                        {% endwith %}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{% trans "Storage Usage" %}</label>
+                    <div class="progress">
+                        {% with percentage=user.get_storage_usage_percentage %}
+                            <div class="progress-bar" role="progressbar"
+                                 style="width: {{ percentage }}%"
+                                 aria-valuenow="{{ percentage }}"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100">
+                                {{ user.get_storage_usage_display }}/{{ user.get_storage_quota_display }}
+                            </div>
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 设置表单 -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">{% trans "Profile Settings" %}</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                        <div class="mb-3">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ field.errors.0 }}
+                                </div>
+                            {% endif %}
+                            {% if field.help_text %}
+                                <div class="form-text">{{ field.help_text }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            {% trans "Save Changes" %}
+                        </button>
+                        <a href="{% url 'accounts:change_password' %}" class="btn btn-outline-secondary">
+                            {% trans "Change Password" %}
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Online File Converter" %} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="hero text-center py-5">
+    <h1 class="display-4">{% trans "Convert Files Online" %}</h1>
+    <p class="lead">
+        {% trans "Free online file converter - Convert documents, images, and more." %}
+    </p>
+    <div class="mt-4">
+        <a href="{% url 'converter:convert' %}" class="btn btn-primary btn-lg">
+            {% trans "Start Converting" %}
+        </a>
+    </div>
+</div>
+
+<div class="features py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">{% trans "Features" %}</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-sync-alt text-primary"></i>
+                            {% trans "Easy Conversion" %}
+                        </h5>
+                        <p class="card-text">
+                            {% trans "Convert files between different formats with just a few clicks." %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-layer-group text-primary"></i>
+                            {% trans "Batch Processing" %}
+                        </h5>
+                        <p class="card-text">
+                            {% trans "Convert multiple files at once to save time." %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="fas fa-shield-alt text-primary"></i>
+                            {% trans "Secure & Private" %}
+                        </h5>
+                        <p class="card-text">
+                            {% trans "Your files are encrypted and automatically deleted after conversion." %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="formats py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4">{% trans "Supported Formats" %}</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <h4>{% trans "Images" %}</h4>
+                <ul class="list-unstyled">
+                    <li>JPG ↔ PNG</li>
+                    <li>PNG ↔ GIF</li>
+                    <li>SVG ↔ PNG</li>
+                    <li>BMP ↔ JPG</li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h4>{% trans "Documents" %}</h4>
+                <ul class="list-unstyled">
+                    <li>PDF ↔ DOCX</li>
+                    <li>DOCX ↔ PDF</li>
+                    <li>PDF ↔ TXT</li>
+                    <li>DOCX ↔ TXT</li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h4>{% trans "Spreadsheets" %}</h4>
+                <ul class="list-unstyled">
+                    <li>XLSX ↔ CSV</li>
+                    <li>CSV ↔ XLSX</li>
+                    <li>XLSX ↔ PDF</li>
+                    <li>CSV ↔ PDF</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="how-it-works py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">{% trans "How It Works" %}</h2>
+        <div class="row text-center">
+            <div class="col-md-4">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h5>{% trans "Upload File" %}</h5>
+                    <p>{% trans "Choose the file you want to convert" %}</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h5>{% trans "Select Format" %}</h5>
+                    <p>{% trans "Choose your target format" %}</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h5>{% trans "Download" %}</h5>
+                    <p>{% trans "Get your converted file" %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.hero {
+    background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+    color: white;
+    padding: 80px 0;
+}
+
+.features .card {
+    transition: transform 0.3s;
+}
+
+.features .card:hover {
+    transform: translateY(-5px);
+}
+
+.step {
+    padding: 20px;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background: #007bff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    font-size: 20px;
+    font-weight: bold;
+}
+</style>
+{% endblock %} 

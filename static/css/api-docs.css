@@ -1,0 +1,127 @@
+.api-docs {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.api-docs h1 {
+    color: var(--primary-color);
+    margin-bottom: 30px;
+}
+
+.api-docs section {
+    margin-bottom: 40px;
+}
+
+.api-docs h2 {
+    color: #333;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.endpoint {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.endpoint-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.method {
+    background: var(--primary-color);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.url {
+    background: #f5f5f5;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+.parameters table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+.parameters th,
+.parameters td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.parameters th {
+    background: #f5f5f5;
+    font-weight: bold;
+}
+
+.response pre {
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.format-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.format-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.format-list li {
+    background: #f5f5f5;
+    padding: 5px 10px;
+    margin: 5px 0;
+    border-radius: 4px;
+}
+
+.api-errors table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.api-errors th,
+.api-errors td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.api-errors th {
+    background: #f5f5f5;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .endpoint-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .method {
+        margin-bottom: 10px;
+    }
+    
+    .parameters table {
+        display: block;
+        overflow-x: auto;
+    }
+} 

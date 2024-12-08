@@ -1,0 +1,16 @@
+{% load i18n %}
+{% trans "Welcome to File Converter!" %}
+
+{% trans "Hi" %} {{ user.username }},
+
+{% trans "Thank you for registering with File Converter. To complete your registration and verify your email address, please visit the following link:" %}
+
+{{ verification_url }}
+
+{% trans "This verification link will expire in 24 hours." %}
+
+{% trans "If you did not create an account, you can safely ignore this email." %}
+
+--
+{% trans "This is an automated message, please do not reply." %}
+© {% now "Y" %} File Converter. {% trans "All rights reserved." %} 

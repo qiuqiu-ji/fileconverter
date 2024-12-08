@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans "Convert Files" %} - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/dropzone.min.css' %}" rel="stylesheet">
+<style>
+.conversion-options {
+    max-width: 800px;
+    margin: 0 auto;
+}
+.dropzone {
+    border: 2px dashed #ccc;
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+    background: #f8f9fa;
+    cursor: pointer;
+}
+.dropzone:hover {
+    border-color: #0d6efd;
+    background: #e9ecef;
+}
+.progress {
+    height: 20px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="conversion-options">
+    <h2 class="text-center mb-4">{% trans "Convert Your Files" %}</h2>
+    
+    <!-- 格式选择 -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label">{% trans "From Format" %}</label>
+                    <select class="form-select" id="fromFormat">
+                        {% for format in source_formats %}
+                            <option value="{{ format.id }}">{{ format.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">{% trans "To Format" %}</label>
+                    <select class="form-select" id="toFormat">
+                        {% for format in target_formats %}
+                            <option value="{{ format.id }}">{{ format.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 文件上传区域 -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form id="uploadForm" class="dropzone" action="{% url 'converter:upload' %}">
+                {% csrf_token %}
+                <div class="dz-message">
+                    <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
+                    <h4>{% trans "Drop files here or click to upload" %}</h4>
+                    <p class="text-muted">
+                        {% trans "Maximum file size:" %} {{ max_file_size|filesizeformat }}
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 转换列表 -->
+    <div id="conversionList" class="card">
+        <div class="card-header">
+            {% trans "Conversion Tasks" %}
+        </div>
+        <div class="list-group list-group-flush">
+            <!-- 任务项模板 -->
+            <template id="taskTemplate">
+                <div class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="filename"></span>
+                        <span class="status badge"></span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated"></div>
+                    </div>
+                    <div class="mt-2 text-end">
+                        <button class="btn btn-sm btn-primary download-btn" style="display:none;">
+                            <i class="fas fa-download"></i> {% trans "Download" %}
+                        </button>
+                        <button class="btn btn-sm btn-danger cancel-btn">
+                            <i class="fas fa-times"></i> {% trans "Cancel" %}
+                        </button>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/dropzone.min.js' %}"></script>
+<script>
+Dropzone.autoDiscover = false;
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 初始化Dropzone
+    const uploadForm = new Dropzone('#uploadForm', {
+        url: "{% url 'converter:upload' %}",
+        paramName: 'file',
+        maxFilesize: {{ max_file_size_mb }},
+        chunking: true,
+        forceChunking: true,
+        chunkSize: 2000000, // 2MB
+        parallelChunkUploads: true,
+        maxFiles: 10,
+        autoProcessQueue: true,
+        addRemoveLinks: true,
+        dictDefaultMessage: "{% trans 'Drop files here or click to upload' %}",
+        
+        init: function() {
+            this.on('sending', function(file, xhr, formData) {
+                formData.append('from_format', document.getElementById('fromFormat').value);
+                formData.append('to_format', document.getElementById('toFormat').value);
+            });
+            
+            this.on('success', function(file, response) {
+                addTask(response.task_id, file.name);
+            });
+            
+            this.on('error', function(file, errorMessage) {
+                showError(errorMessage);
+            });
+        }
+    });
+
+    // 添加任务到列表
+    function addTask(taskId, filename) {
+        const template = document.getElementById('taskTemplate');
+        const taskElement = template.content.cloneNode(true);
+        
+        taskElement.querySelector('.filename').textContent = filename;
+        taskElement.querySelector('.status').textContent = 'Pending';
+        taskElement.querySelector('.progress-bar').style.width = '0%';
+        
+        const listGroup = document.querySelector('.list-group');
+        listGroup.appendChild(taskElement);
+        
+        // 开始监控任务状态
+        monitorTask(taskId, listGroup.lastElementChild);
+    }
+
+    // 监控任务状态
+    function monitorTask(taskId, element) {
+        const statusBadge = element.querySelector('.status');
+        const progressBar = element.querySelector('.progress-bar');
+        const downloadBtn = element.querySelector('.download-btn');
+        
+        function checkStatus() {
+            fetch(`{% url 'converter:task_status' %}?task_id=${taskId}`)
+                .then(response => response.json())
+                .then(data => {
+                    statusBadge.textContent = data.status;
+                    progressBar.style.width = `${data.progress}%`;
+                    
+                    if (data.status === 'completed') {
+                        downloadBtn.href = data.download_url;
+                        downloadBtn.style.display = 'inline-block';
+                        return;
+                    }
+                    
+                    if (data.status === 'failed') {
+                        element.classList.add('list-group-item-danger');
+                        return;
+                    }
+                    
+                    // 继续检查状态
+                    setTimeout(checkStatus, 1000);
+                })
+                .catch(error => {
+                    console.error('Error checking task status:', error);
+                    statusBadge.textContent = 'Error';
+                    element.classList.add('list-group-item-danger');
+                });
+        }
+        
+        checkStatus();
+    }
+
+    // 显示错误消息
+    function showError(message) {
+        const alert = document.createElement('div');
+        alert.className = 'alert alert-danger alert-dismissible fade show';
+        alert.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        document.querySelector('main').insertBefore(alert, document.querySelector('.conversion-options'));
+    }
+});
+</script>
+{% endblock %} 

@@ -1,0 +1,90 @@
+# 日本語翻訳ファイル
+msgid ""
+msgstr ""
+"Project-Id-Version: file_converter 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-20 12:00+0800\n"
+"PO-Revision-Date: 2024-01-20 12:00+0800\n"
+"Last-Translator: Your Name <your.email@example.com>\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 共通テキスト
+msgid "File Converter"
+msgstr "ファイル変換ツール"
+
+msgid "Convert"
+msgstr "変換"
+
+msgid "Upload"
+msgstr "アップロード"
+
+msgid "Download"
+msgstr "ダウンロード"
+
+# エラーメッセージ
+msgid "File size exceeds limit"
+msgstr "ファイルサイズが制限を超えています"
+
+msgid "Unsupported file format"
+msgstr "サポートされていないファイル形式です"
+
+msgid "Conversion failed"
+msgstr "変換に失敗しました"
+
+msgid "Please login first"
+msgstr "最初にログインしてください"
+
+# ナビゲーション
+msgid "Home"
+msgstr "ホーム"
+
+msgid "Start Converting"
+msgstr "変換を開始"
+
+msgid "Login"
+msgstr "ログイン"
+
+msgid "Register"
+msgstr "新規登録"
+
+msgid "Profile"
+msgstr "プロフィール"
+
+msgid "Logout"
+msgstr "ログアウト"
+
+# 機能説明
+msgid "Batch conversion"
+msgstr "一括変換"
+
+msgid "Format optimization"
+msgstr "形式の最適化"
+
+msgid "Secure storage"
+msgstr "安全なストレージ"
+
+# ユーザーガイド
+msgid "Supported Formats"
+msgstr "対応フォーマット"
+
+msgid "Image Formats"
+msgstr "画像フォーマット"
+
+msgid "Document Formats"
+msgstr "文書フォーマット"
+
+msgid "How it works"
+msgstr "使用方法"
+
+msgid "Step 1: Upload your file"
+msgstr "ステップ1：ファイルをアップロード"
+
+msgid "Step 2: Select format"
+msgstr "ステップ2：形式を選択"
+
+msgid "Step 3: Download converted file"
+msgstr "ステップ3：変換したファイルをダウンロード" 

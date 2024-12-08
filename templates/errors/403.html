@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}403 - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+    <div class="error-page">
+        <h1 class="display-1 text-muted">403</h1>
+        <div class="error-content">
+            <h3><i class="fas fa-ban text-danger"></i> {% trans "Access Denied" %}</h3>
+            <p>
+                {% if reason %}
+                    {{ reason }}
+                {% else %}
+                    {% trans "You do not have permission to access this page." %}
+                {% endif %}
+                {% if not user.is_authenticated %}
+                    <br>
+                    {% trans "Please" %} <a href="{% url 'accounts:login' %}?next={{ request.path }}">{% trans "log in" %}</a> {% trans "to continue." %}
+                {% endif %}
+            </p>
+        </div>
+        <div class="mt-4">
+            <a href="{% url 'home' %}" class="btn btn-primary">
+                <i class="fas fa-home"></i> {% trans "Go Home" %}
+            </a>
+            {% if not user.is_authenticated %}
+                <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="btn btn-success ms-2">
+                    <i class="fas fa-sign-in-alt"></i> {% trans "Log In" %}
+                </a>
+            {% else %}
+                <button onclick="history.back()" class="btn btn-outline-secondary ms-2">
+                    <i class="fas fa-arrow-left"></i> {% trans "Go Back" %}
+                </button>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

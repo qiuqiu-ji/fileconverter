@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Batch Convert" %} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">{% trans "Batch Convert" %}</h4>
+                </div>
+                <div class="card-body">
+                    <!-- 批量上传区域 -->
+                    <div id="batchUploadArea" class="upload-area text-center p-5 mb-4">
+                        <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                        <h5>{% trans "Drag and drop multiple files here" %}</h5>
+                        <p class="text-muted">{% trans "or" %}</p>
+                        <label class="btn btn-primary">
+                            {% trans "Choose Files" %}
+                            <input type="file" id="batchFileInput" multiple style="display: none;">
+                        </label>
+                        <p class="mt-2 text-muted small">
+                            {% trans "Maximum" %} {{ max_files }} {% trans "files" %}, 
+                            {% trans "up to" %} {{ max_total_size|filesizeformat }} {% trans "total" %}
+                        </p>
+                    </div>
+
+                    <!-- 批量设置 -->
+                    <div id="batchSettings" class="mb-4" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="form-label">{% trans "Convert all files to:" %}</label>
+                                <select class="form-select" id="batchTargetFormat">
+                                    <option value="">{% trans "Select format" %}</option>
+                                    {% for group, formats in supported_formats.items %}
+                                        <optgroup label="{{ group }}">
+                                            {% for format in formats %}
+                                                <option value="{{ format }}">{{ format|upper }}</option>
+                                            {% endfor %}
+                                        </optgroup>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">{% trans "Quality settings:" %}</label>
+                                <select class="form-select" id="batchQuality">
+                                    <option value="high">{% trans "High Quality" %}</option>
+                                    <option value="medium">{% trans "Medium Quality" %}</option>
+                                    <option value="low">{% trans "Low Quality (Smaller Size)" %}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 批量文件列表 -->
+                    <div id="batchFileList" class="mb-4"></div>
+
+                    <!-- 批量转换按钮 -->
+                    <div id="batchActions" class="d-grid gap-2" style="display: none;">
+                        <button id="startBatchBtn" class="btn btn-primary">
+                            {% trans "Start Batch Conversion" %}
+                        </button>
+                        <button id="clearBatchBtn" class="btn btn-outline-secondary">
+                            {% trans "Clear All" %}
+                        </button>
+                    </div>
+
+                    <!-- 批量进度显示 -->
+                    <div id="batchProgressArea" style="display: none;">
+                        <div class="progress mb-2">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <p id="batchStatusText" class="text-center"></p>
+                        <div id="batchDetailProgress"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.upload-area {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.upload-area.drag-over {
+    border-color: #007bff;
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.batch-file-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.batch-file-item .file-icon {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.batch-file-item .file-info {
+    flex-grow: 1;
+}
+
+.batch-file-item .file-name {
+    margin-bottom: 0;
+}
+
+.batch-file-item .file-size {
+    font-size: 12px;
+    color: #666;
+}
+
+.batch-file-item .file-status {
+    margin-left: 10px;
+}
+
+.batch-file-item .progress {
+    height: 4px;
+    margin-top: 5px;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/batch-converter.js' %}"></script>
+<script>
+    const batchConverter = new BatchConverter({
+        maxFiles: {{ max_files }},
+        maxTotalSize: {{ max_total_size }},
+        supportedFormats: {{ supported_formats|json }},
+        urls: {
+            upload: "{% url 'converter:batch_upload' %}",
+            convert: "{% url 'converter:batch_convert' %}",
+            status: "{% url 'converter:batch_status' 'batch_id' %}",
+        },
+        csrf_token: "{{ csrf_token }}",
+        i18n: {
+            selectFormat: "{% trans 'Please select a format' %}",
+            converting: "{% trans 'Converting...' %}",
+            success: "{% trans 'Batch conversion successful!' %}",
+            error: "{% trans 'Batch conversion failed:' %}",
+            invalidFormat: "{% trans 'Unsupported format' %}",
+            tooManyFiles: "{% trans 'Too many files' %}",
+            totalSizeExceeded: "{% trans 'Total size exceeded' %}",
+        }
+    });
+</script>
+{% endblock %} 

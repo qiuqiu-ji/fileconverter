@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<div class="api-docs">
+    <h1>{% trans "API Documentation" %}</h1>
+    
+    <section class="api-intro">
+        <h2>{% trans "Introduction" %}</h2>
+        <p>{% trans "This API allows you to convert files between different formats." %}</p>
+        <p>{% trans "Base URL" %}: <code>{{ base_url }}</code></p>
+    </section>
+
+    <section class="api-auth">
+        <h2>{% trans "Authentication" %}</h2>
+        <p>{% trans "All API requests require authentication using Bearer token:" %}</p>
+        <pre><code>Authorization: Bearer your-api-token</code></pre>
+    </section>
+
+    <section class="api-endpoints">
+        <h2>{% trans "Endpoints" %}</h2>
+        {% for category, endpoints in api_docs.endpoints.items %}
+            <div class="endpoint-category">
+                <h3>{{ category }}</h3>
+                {% for name, endpoint in endpoints.items %}
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method">{{ endpoint.method }}</span>
+                            <code class="url">{{ endpoint.url }}</code>
+                        </div>
+                        <p class="description">{{ endpoint.description }}</p>
+                        
+                        {% if endpoint.parameters %}
+                        <div class="parameters">
+                            <h4>{% trans "Parameters" %}</h4>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>{% trans "Name" %}</th>
+                                        <th>{% trans "Type" %}</th>
+                                        <th>{% trans "Required" %}</th>
+                                        <th>{% trans "Description" %}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for name, param in endpoint.parameters.items %}
+                                    <tr>
+                                        <td>{{ name }}</td>
+                                        <td>{{ param.type }}</td>
+                                        <td>{{ param.required|yesno }}</td>
+                                        <td>{{ param.description }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% endif %}
+
+                        {% if endpoint.responses %}
+                        <div class="responses">
+                            <h4>{% trans "Responses" %}</h4>
+                            {% for code, response in endpoint.responses.items %}
+                            <div class="response">
+                                <h5>{{ code }} - {{ response.description }}</h5>
+                                {% if response.example %}
+                                <pre><code>{{ response.example|pprint }}</code></pre>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </section>
+
+    <section class="api-formats">
+        <h2>{% trans "Supported Formats" %}</h2>
+        <div class="format-list">
+            <div>
+                <h3>{% trans "Input Formats" %}</h3>
+                <ul>
+                    {% for format in api_docs.supported_formats.input %}
+                    <li>{{ format }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                <h3>{% trans "Output Formats" %}</h3>
+                <ul>
+                    {% for format in api_docs.supported_formats.output %}
+                    <li>{{ format }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="api-errors">
+        <h2>{% trans "Error Codes" %}</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>{% trans "Code" %}</th>
+                    <th>{% trans "Description" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for code, description in api_docs.error_codes.items %}
+                <tr>
+                    <td>{{ code }}</td>
+                    <td>{{ description }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</div>
+{% endblock %} 

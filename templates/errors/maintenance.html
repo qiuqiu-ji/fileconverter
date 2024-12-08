@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Maintenance" %} - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.maintenance-icon {
+    animation: wrench 2.5s ease infinite;
+}
+
+@keyframes wrench {
+    0% { transform: rotate(-12deg); }
+    8% { transform: rotate(12deg); }
+    10% { transform: rotate(24deg); }
+    18% { transform: rotate(-24deg); }
+    20% { transform: rotate(-24deg); }
+    28% { transform: rotate(24deg); }
+    30% { transform: rotate(24deg); }
+    38% { transform: rotate(-24deg); }
+    40% { transform: rotate(-24deg); }
+    48% { transform: rotate(24deg); }
+    50% { transform: rotate(24deg); }
+    58% { transform: rotate(-24deg); }
+    60% { transform: rotate(-24deg); }
+    68% { transform: rotate(24deg); }
+    75% { transform: rotate(0deg); }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+    <div class="maintenance-page">
+        <i class="fas fa-tools fa-5x text-warning mb-4 maintenance-icon"></i>
+        <h2>{% trans "System Maintenance" %}</h2>
+        <p class="lead">
+            {% trans "We are currently performing scheduled maintenance." %}
+        </p>
+        <div class="maintenance-info mt-4">
+            {% if maintenance_message %}
+                <div class="alert alert-info">
+                    {{ maintenance_message }}
+                </div>
+            {% endif %}
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Maintenance Details" %}</h5>
+                    <ul class="list-unstyled">
+                        <li>
+                            <strong>{% trans "Start Time:" %}</strong>
+                            {{ start_time|default:_("In Progress") }}
+                        </li>
+                        <li>
+                            <strong>{% trans "Expected Duration:" %}</strong>
+                            {{ duration|default:_("Approximately 1 hour") }}
+                        </li>
+                        <li>
+                            <strong>{% trans "Expected Completion:" %}</strong>
+                            {{ completion_time|default:_("Soon") }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="mt-4">
+            <button onclick="location.reload()" class="btn btn-primary">
+                <i class="fas fa-sync"></i> {% trans "Check Status" %}
+            </button>
+            <a href="{% url 'support:status' %}" class="btn btn-outline-info ms-2">
+                <i class="fas fa-info-circle"></i> {% trans "System Status" %}
+            </a>
+            <a href="{% url 'support:notifications' %}" class="btn btn-outline-secondary ms-2">
+                <i class="fas fa-bell"></i> {% trans "Get Notified" %}
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 自动刷新页面
+let refreshTimeout;
+
+function scheduleRefresh() {
+    clearTimeout(refreshTimeout);
+    refreshTimeout = setTimeout(function() {
+        location.reload();
+    }, 60000);  // 每分钟刷新一次
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    scheduleRefresh();
+});
+
+// 用户交互时重置定时器
+document.addEventListener('click', scheduleRefresh);
+document.addEventListener('keypress', scheduleRefresh);
+</script>
+{% endblock %} 

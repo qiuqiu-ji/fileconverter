@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "File Preview" %} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">{% trans "File Preview" %}</h4>
+                    <div>
+                        <a href="{{ task.converted_file.url }}" class="btn btn-primary">
+                            <i class="fas fa-download"></i>
+                            {% trans "Download" %}
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="preview-container" class="text-center">
+                        {% if task.target_format in 'pdf,jpg,png,gif' %}
+                            <iframe src="{{ preview_url }}" 
+                                    class="preview-frame"
+                                    style="width: 100%; height: 600px; border: none;">
+                            </iframe>
+                        {% else %}
+                            <div class="alert alert-info">
+                                {% trans "Preview not available for this file type." %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.preview-frame {
+    background: #f8f9fa;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+    .preview-frame {
+        height: 400px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 处理预览加载失败
+document.querySelector('.preview-frame')?.addEventListener('error', function() {
+    this.style.display = 'none';
+    const container = document.getElementById('preview-container');
+    container.innerHTML = `
+        <div class="alert alert-danger">
+            {% trans "Failed to load preview. Please try downloading the file." %}
+        </div>
+    `;
+});
+</script>
+{% endblock %} 
