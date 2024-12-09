@@ -56,7 +56,7 @@ converted/
 celerybeat-schedule 
 
 # dependencies
-/node_modules
+node_modules
 /.pnp
 .pnp.js
 
@@ -64,7 +64,7 @@ celerybeat-schedule
 /coverage
 
 # next.js
-/.next/
+.next
 /out/
 
 # production
